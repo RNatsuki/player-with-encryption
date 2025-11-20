@@ -3,10 +3,15 @@
 import { useState } from 'react';
 import VideoPlayer from '@/components/VideoPlayer';
 
+type UploadResult = {
+  id: string;
+  title: string;
+};
+
 export default function Home() {
   const [videoId, setVideoId] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [uploadResult, setUploadResult] = useState<any>(null);
+  const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
