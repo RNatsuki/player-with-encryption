@@ -34,10 +34,9 @@ export async function addVideo({
 
   const keyId = id;
 
-  const timestamp = Date.now();
-  const playlistPath = path.join(outputDir, `${timestamp}-playlist.m3u8`);
-  const keyPath = path.join(outputDir, `${timestamp}-key.bin`);
-  const keyInfoPath = path.join(outputDir, `${timestamp}-key-info.txt`);
+  const playlistPath = path.join(outputDir, `${keyId}-playlist.m3u8`);
+  const keyPath = path.join(outputDir, `${keyId}-key.bin`);
+  const keyInfoPath = path.join(outputDir, `${keyId}-key-info.txt`);
 
   // Generate encryption key
   const key = crypto.randomBytes(16);
@@ -52,7 +51,7 @@ export async function addVideo({
   // FFmpeg command for HLS with encryption
   const posixFilePath = toPosixPath(filePath);
   const posixPlaylistPath = toPosixPath(playlistPath);
-  const posixSegmentPattern = toPosixPath(path.join(outputDir, `${timestamp}-segment-%03d.ts`));
+  const posixSegmentPattern = toPosixPath(path.join(outputDir, `${keyId}-segment-%03d.ts`));
   const posixKeyInfoPath = toPosixPath(keyInfoPath);
   const ffmpegCommand = `ffmpeg -y -i "${posixFilePath}" \
     -c:v libx264 -preset veryfast -b:v 800k -maxrate 800k -bufsize 1600k \

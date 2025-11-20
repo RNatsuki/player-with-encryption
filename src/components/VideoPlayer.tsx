@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import videojs from 'video.js';
-// @ts-ignore
+// @ts-expect-error some types are missing
 import 'video.js/dist/video-js.css';
 
 interface VideoPlayerProps {
@@ -13,7 +13,6 @@ interface VideoPlayerProps {
 export default function VideoPlayer({ videoId, episodeId }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<any>(null);
-  const [progress, setProgress] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [isTheaterMode, setIsTheaterMode] = useState(false);
@@ -22,7 +21,6 @@ export default function VideoPlayer({ videoId, episodeId }: VideoPlayerProps) {
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [videoInfo, setVideoInfo] = useState<{ duration: number; currentTime: number }>({ duration: 0, currentTime: 0 });
   const [progressLoaded, setProgressLoaded] = useState(false);
-  const lastSavedProgress = useRef(0);
 
   useEffect(() => {
     setMounted(true);
@@ -109,13 +107,6 @@ export default function VideoPlayer({ videoId, episodeId }: VideoPlayerProps) {
       setIsMuted(playerRef.current.muted());
 
       // Apply progress after video is loaded
-      if (progress > 0) {
-        const duration = playerRef.current.duration();
-        // Convert percentage back to time in seconds
-        const timeInSeconds = (progress / 100) * duration;
-        console.log('Setting progress to:', timeInSeconds, 'seconds (', progress, '% of', duration, 'seconds)');
-        playerRef.current.currentTime(timeInSeconds);
-      }
     });
 
     // Update video info
@@ -138,7 +129,7 @@ export default function VideoPlayer({ videoId, episodeId }: VideoPlayerProps) {
     });
 
     // Save progress periodically (for both episodes and movies)
-    let saveInterval: NodeJS.Timeout | null = null;
+    const saveInterval: NodeJS.Timeout | null = null;
     // if (episodeId || videoId) {
     //   saveInterval = setInterval(() => {
     //     if (playerRef.current) {
